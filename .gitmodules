@@ -1,0 +1,6 @@
+[submodule "3rd-parties/testa"]
+	path = 3rd-parties/testa
+	url = git@github.com:TimeExceed/testa.git
+[submodule "3rd-parties/fassert"]
+	path = 3rd-parties/fassert
+	url = git@github.com:TimeExceed/fancy_assert.git
