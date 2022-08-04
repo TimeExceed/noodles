@@ -145,5 +145,13 @@ void Noodles::submit(std::function<void()> task) noexcept
 }
 
 } // namespace impl
+
+Noodles::Noodles(size_t concurrency, size_t slot_size_hint) noexcept
+:   mImpl(new impl::Noodles(concurrency, slot_size_hint))
+{}
+
+Noodles::~Noodles()
+{}
+
 } // namespace noodles
 

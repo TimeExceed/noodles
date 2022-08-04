@@ -56,3 +56,17 @@ void multiple(const string&)
     }
 }
 TESTA_DEF_JUNIT_LIKE1(multiple);
+
+void high_level(const string&)
+{
+    noodles::Noodles tp(1, 1);
+    future<int> fut = tp.submit([]() noexcept -> int {
+        return 42;
+    });
+    fut.wait();
+    auto val = fut.get();
+    TESTA_ASSERT(val == 42)
+        (val)
+        .issue();
+}
+TESTA_DEF_JUNIT_LIKE1(high_level);
