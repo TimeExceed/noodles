@@ -22,7 +22,7 @@ namespace impl {
 class Noodles
 {
 public:
-    explicit Noodles(size_t concurrency, size_t slot_size_hint) noexcept;
+    explicit Noodles(std::size_t concurrency, std::size_t slot_size_hint) noexcept;
     ~Noodles();
 
     Noodles(Noodles&&) =delete;
@@ -41,7 +41,7 @@ public:
 
 private:
     void worker() noexcept;
-    bool run_on_slot(size_t i) noexcept;
+    bool run_on_slot(std::size_t i) noexcept;
     void wake_up_all() noexcept;
 
     struct Slot
@@ -60,7 +60,7 @@ private:
 class Noodles
 {
 public:
-    explicit Noodles(size_t concurrency, size_t slot_size_hint) noexcept;
+    explicit Noodles(std::size_t concurrency, std::size_t slot_size_hint) noexcept;
     ~Noodles();
 
     Noodles(Noodles&&) =default;

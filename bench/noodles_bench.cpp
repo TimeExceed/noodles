@@ -1,4 +1,5 @@
 #include "noodles/noodles.hpp"
+#include "noodles/naive.hpp"
 #include "prettyprint.hpp"
 #include <chrono>
 #include <thread>
@@ -67,16 +68,36 @@ void run(
     }
 }
 
-int main() {
-    txn_submitted.store(0, memory_order_relaxed);
+void bench_noodles() {
+    cout << "benchmark noodles" << endl;
+    txn_submitted.store(0, memory_order_acq_rel);
     for(size_t slot_size = 100; slot_size <= 1000; slot_size *= 2) {
-        for(size_t concurrency = 2; concurrency <= 64; concurrency *= 2) {
+        for(size_t concurrency = 1; concurrency <= 64; concurrency *= 2) {
             for(size_t n_writers = 2; n_writers <= 4; n_writers *= 2) {
-                noodles::impl::Noodles tp(concurrency, slot_size);
-                function<void(Task)> submitter = bind(&noodles::impl::Noodles::submit, &tp, placeholders::_1);
-                run(std::move(submitter), n_writers, concurrency, slot_size);
+                noodles::impl::Noodles nd(concurrency, slot_size);
+                function<void(Task)> nd_submitter = bind(&noodles::impl::Noodles::submit, &nd, placeholders::_1);
+                run(std::move(nd_submitter), n_writers, concurrency, slot_size);
             }
         }
     }
+}
+
+void bench_naive() {
+    cout << "benchmark naive" << endl;
+    txn_submitted.store(0, memory_order_acq_rel);
+    for(size_t slot_size = 100; slot_size <= 100; slot_size *= 2) {
+        for(size_t concurrency = 1; concurrency <= 64; concurrency *= 2) {
+            for(size_t n_writers = 2; n_writers <= 4; n_writers *= 2) {
+                noodles::naive::ThreadPool naive(concurrency, slot_size);
+                function<void(Task)> nv_submitter = bind(&noodles::naive::ThreadPool::submit, &naive, placeholders::_1);
+                run(std::move(nv_submitter), n_writers, concurrency, slot_size);
+            }
+        }
+    }
+}
+
+int main() {
+    // bench_noodles();
+    bench_naive();
     return 0;
 }

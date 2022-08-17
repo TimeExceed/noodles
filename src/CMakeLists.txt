@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 add_library(noodles_static STATIC
     noodles.cpp
+    naive.cpp
     semaphore.cpp
 )
 
